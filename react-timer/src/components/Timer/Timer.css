@@ -1,0 +1,21 @@
+.timer-container {
+    background-color: var(--timer-background-color);
+    border: var(--timer-border);
+    height: var(--timer-height);
+    width: var(--timer-width);
+    box-shadow: 5px 10px #61dafb;
+}
+
+.timer-button-container {
+    border-bottom: 1px solid #589ffa;
+    box-shadow: 5px 10px #61dafb;
+}
+
+.time-display {
+    padding: 20px 10px 20px 10px;
+    font-size: xx-large;
+    text-align: center;
+    color: #FFFFFF;
+    font-weight: bolder;
+    background-color: #589ffa;
+}

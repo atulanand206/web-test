@@ -1,0 +1,20 @@
+.button-container {
+    align-content: center;
+    display:inline-block;
+    text-align: center;
+    width: 30.77%;
+    margin: 10px 10px;
+    font-size: var(--button-text-size);
+    background-color: #589ffa;
+}
+
+.button-container:hover {
+    cursor: pointer;
+}
+
+.button-value {
+    padding: 10px 10px;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-transform: uppercase;
+}
