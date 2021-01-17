@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './App.css';
+import MatTable from "./Table";
 
 class Turn extends React.Component {
     constructor(props) {
@@ -121,6 +121,7 @@ function App() {
     return (
         <div className="App">
             <Game/>
+            <MatTable/>
         </div>
     );
 }
