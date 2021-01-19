@@ -6,6 +6,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import './mattable.css';
 
 class MatTable extends React.Component {
 
@@ -44,7 +45,7 @@ class MatTable extends React.Component {
     }
 
     render() {
-        return <TableContainer component={Paper}>
+        return <TableContainer component={Paper} align="center" className="mattable">
             <Table>
                 <TableHead>
                     <TableRow>
