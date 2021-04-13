@@ -6,8 +6,7 @@ const empty = ' '
 const flag = '@'
 const row = 20
 const col = 20
-const mines = 100
-
+const mines = 50
 class Cell extends React.Component {
     constructor(props) {
         super(props);
@@ -113,8 +112,22 @@ class Board extends React.Component {
         } else if (item === empty) {
             var cells = this.state.cells;
             const selects = this.cellsToMakeVisible(cells, i, j);
+            const sls = [];
+            selects.map(x => {
+                sls.push(x);
+                const xx = x[0];
+                const xy = x[1];
+                sls.push([xx-1,xy-1]);
+                sls.push([xx-1,xy]);
+                sls.push([xx-1,xy+1]);
+                sls.push([xx, xy-1]);
+                sls.push([xx, xy+1]);
+                sls.push([xx+1,xy-1]);
+                sls.push([xx+1,xy]);
+                sls.push([xx+1,xy+1]);
+            });
             const st = cells.map((row, rx) => row.map((col, cx) => { 
-                var s = selects.filter(s => s[0] === rx && s[1] === cx);
+                var s = sls.filter(s => s[0] === rx && s[1] === cx);
                 if(s.length !== 0) {
                     return {disabled: true, value: col.value, hidden: false};
                 }
