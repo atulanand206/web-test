@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import MatTable from "./Table";
+import Board from "./Sweeper";
 
 class Turn extends React.Component {
     constructor(props) {
@@ -120,8 +121,8 @@ class Game extends React.Component {
 function App() {
     return (
         <div className="App">
-            <Game/>
-            <MatTable/>
+            <Board/>
+            {/* <MatTable/> */}
         </div>
     );
 }

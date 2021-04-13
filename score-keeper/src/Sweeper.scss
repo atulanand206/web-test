@@ -1,0 +1,46 @@
+:root {
+    --cell-color: tomato;
+    --cell-color-hover: firebrick;
+    --cell-border: slategray
+}
+
+.row-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;    
+    
+}
+
+.cell {
+    height: 32px;
+    width: 32px;
+    border: var(--cell-border);
+    background-color: var(--cell-color);
+    margin: 1px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &__visible {
+        background-color: var(--cell-color-hover);
+        height: 32px;
+        width: 32px;
+        border: var(--cell-border);
+        margin: 1px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    &:hover {
+        background-color: var(--cell-color-hover);
+    }
+}
+
+if, p {
+    margin: auto;
+    color: white;
+}
