@@ -5,7 +5,7 @@ import Cell from './Cell';
 import Score from './Score';
 import Calculation from './Calculation';
 import Server from './Server';
-
+import Control from './Control';
 class Board extends React.Component {
 
     constructor(props) {
@@ -19,7 +19,8 @@ class Board extends React.Component {
             score: 0,
             minesLeft: Base.mines,
             startTime: new Date(),
-            gameStarted: false
+            gameStarted: false,
+            config: Base.configs[0]
         }
         this.handleClick = this.handleClick.bind(this);
     }
@@ -46,16 +47,31 @@ class Board extends React.Component {
         });
     }
 
+    onResetBoard(config) {
+        this.setState({ config: config });
+        this.server.fetchBoard(config, (data) => this.setState({ 
+            cells: data, 
+            minesLeft: config.mines, 
+            mineHit: false,
+            startTime: new Date() 
+        }));
+    }
+
     render() {
         return (
             <div>
+                <br/>
+                {<Control 
+                    onConfigChanged={(config) => this.onResetBoard(config)} />}
                 {<Score 
                     score={this.calculation.calculateScore(this.state.cells)} 
                     minesLeft={this.state.minesLeft} 
                     startTime={this.state.startTime} />}
+                <br/>
                 {this.state.cells.map((element, i) => {
                         return <div className="row-container" key={i}> {element.map((em, j)=> {
                             return <Cell key={i + " " + j} value={em.value} hidden={em.hidden}
+                                        config={this.state.config}
                                         mineHit={this.state.mineHit} disabled={em.disabled}
                                         onClick={(e) => this.handleClick(e, em.value, i, j)}
                                         onMineIdentify={(e) => this.onMineIdentify(e, em, i, j)}/>

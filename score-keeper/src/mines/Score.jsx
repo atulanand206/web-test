@@ -6,8 +6,7 @@ class Score extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            time: '00:00:00',
-            startTime: props.startTime
+            time: '00:00:00'
         };
     }
 
@@ -17,7 +16,7 @@ class Score extends React.Component {
 
     getTime() {
         const now = new Date();
-        const diff = (now.getTime() - this.state.startTime.getTime());
+        const diff = (now.getTime() - this.props.startTime.getTime());
         const diffInSeconds = this.format(diff / (1000));
         const diffInMinutes = this.format(diff / (1000 * 60));
         const diffInHours = this.format(diff / (1000 * 3600));

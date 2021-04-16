@@ -18,6 +18,8 @@ class Cell extends React.Component {
                     break;
             case 2: if (this.props.value === Base.mine) this.props.onMineIdentify();
                     break;
+            default:
+                    break;
         }
     }
 
@@ -29,6 +31,7 @@ class Cell extends React.Component {
     render() {
         return (
             <div 
+                style={this.isVisible() ? { backgroundColor: this.props.config.darker } : { backgroundColor: this.props.config.color }}
                 className={this.isVisible()? "cell__visible" : "cell"} 
                 onClick={(e) => this.handleClick(e)} 
                 onContextMenu={(e) => this.handleClick(e)}>
