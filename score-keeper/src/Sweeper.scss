@@ -40,6 +40,27 @@
     }
 }
 
+.score-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    align-self: center;
+    width: 500px; 
+
+    &__left {
+        padding: 10px;
+        float: left;
+        margin-left: 0%;
+    }
+
+    &__right {
+        padding: 10px;
+        float: right;
+        margin-right: 0%;
+    }
+}
+
 if, p {
     margin: auto;
     color: white;

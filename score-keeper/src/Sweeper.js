@@ -7,6 +7,8 @@ const flag = '@'
 const row = 20
 const col = 20
 const mines = 50
+const directions = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
+const numbers = /^[0-9]+$/;
 class Cell extends React.Component {
     constructor(props) {
         super(props);
@@ -41,6 +43,52 @@ class Cell extends React.Component {
     }
 }
 
+class Score extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            time: '00:00:00',
+            startTime: props.startTime
+        };
+    }
+
+    format(number) {
+        return ('0' + Math.round(number)).slice(-2);
+    }
+
+    getTime() {
+        const now = new Date();
+        const diff = (now.getTime() - this.state.startTime.getTime());
+        const diffInSeconds = this.format(diff / (1000));
+        const diffInMinutes = this.format(diff / (1000 * 60));
+        const diffInHours = this.format(diff / (1000 * 3600));
+        return diffInHours + ':' + diffInMinutes + ':' + diffInSeconds;
+    }
+
+    updateTime() {
+        this.setState({time: this.getTime()});
+    }
+
+    startTimer() {
+        setInterval(() => { this.updateTime(); }, 1000);
+    }
+
+    componentDidMount() {
+        this.startTimer();
+    }
+
+    render() {
+        return (
+            <div className='score-container'>
+                <div className='score-container__left'>{this.props.score}</div>
+                <div className='score-container__left'>{this.state.time}</div>
+                <div className='score-container__right'>{this.props.minesLeft}</div>
+            </div>
+        )
+    }
+}
+
 class Board extends React.Component {
 
     constructor(props) {
@@ -48,7 +96,11 @@ class Board extends React.Component {
         this.state = {
             cells: [],
             mineHit: false,
-            visited: []
+            visited: [],
+            score: 0,
+            minesLeft: mines,
+            startTime: new Date(),
+            gameStarted: false
         }
         this.handleClick = this.handleClick.bind(this);
     }
@@ -94,19 +146,14 @@ class Board extends React.Component {
             var s = selections.filter(s => s[0] === r && s[1] === c);
             if (s.length === 0)
                 selections.push([r, c]);
-            if (this.isValid(cells, visited, r - 1, c - 1)) items.push([r - 1, c - 1]);
-            if (this.isValid(cells, visited, r - 1, c)) items.push([r - 1, c]);
-            if (this.isValid(cells, visited, r - 1, c + 1)) items.push([r - 1, c + 1]);
-            if (this.isValid(cells, visited, r, c - 1)) items.push([r, c - 1]);
-            if (this.isValid(cells, visited, r, c + 1)) items.push([r, c + 1]);
-            if (this.isValid(cells, visited, r + 1, c - 1)) items.push([r + 1, c - 1]);
-            if (this.isValid(cells, visited, r + 1, c)) items.push([r + 1, c]);
-            if (this.isValid(cells, visited, r + 1, c + 1)) items.push([r + 1, c + 1]);
+            directions.map(d => {if (this.isValid(cells, visited, r + d[0], c + d[1])) items.push([r + d[0], c + d[1]]); })
         }
         return selections;
     }
 
     handleClick(e, item, i, j) {
+        console.log(this.state.gameStarted);
+        if (!this.state.gameStarted) this.setState({ startTime: new Date() , gameStarted: true });
         if (item === mine) {
             this.setState({mineHit: true});
         } else if (item === empty) {
@@ -117,14 +164,7 @@ class Board extends React.Component {
                 sls.push(x);
                 const xx = x[0];
                 const xy = x[1];
-                sls.push([xx-1,xy-1]);
-                sls.push([xx-1,xy]);
-                sls.push([xx-1,xy+1]);
-                sls.push([xx, xy-1]);
-                sls.push([xx, xy+1]);
-                sls.push([xx+1,xy-1]);
-                sls.push([xx+1,xy]);
-                sls.push([xx+1,xy+1]);
+                directions.map(d => sls.push([xx + d[0], xy - d[1]]));
             });
             const st = cells.map((row, rx) => row.map((col, cx) => { 
                 var s = sls.filter(s => s[0] === rx && s[1] === cx);
@@ -142,12 +182,26 @@ class Board extends React.Component {
 
     onMineIdentify(e, item, i, j) {
         const st = this.state.cells.map((r, x) => r.map((c, y) => { if (i === x && j === y) return {disabled: true, value: flag, hidden: false}; else return c; } ));
-        this.setState({cells: st});
+        const minesLeft = this.state.minesLeft - 1;
+        this.setState({cells: st, minesLeft: minesLeft});
+    }
+
+    calculateScore() {
+        var score = 0;
+        this.state.cells.map(r => r.map(c => {
+            if (!c.hidden && c.value.match(numbers) > 0)
+                score += parseInt(c.value);
+        }));
+        return score;
     }
 
     render() {
         return (
             <div>
+                {<Score 
+                    score={this.calculateScore()} 
+                    minesLeft={this.state.minesLeft} 
+                    startTime={this.state.startTime} />}
                 {this.state.cells.map((element, i) => {
                         return <div className="row-container" key={i}> {element.map((em, j)=> {
                             return <Cell key={i + " " + j} value={em.value} hidden={em.hidden}
