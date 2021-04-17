@@ -69,11 +69,25 @@ if, p {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-self: center;
+    justify-content: center;
+}
+
+.config-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     float: right;
 }
 
 .control-item {
     padding: 10px;
     width: 100px;
+    cursor: pointer;
+}
+
+.icon-container {
+    width: 32px;
+    height: 32px;
     cursor: pointer;
 }

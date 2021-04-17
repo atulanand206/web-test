@@ -10,13 +10,13 @@ class Cell extends React.Component {
 
     handleClick(e) {
         e.preventDefault();
-        if (this.props.disabled) {
+        if (this.props.disabled || !this.props.gameActive) {
             return;
         }
         switch(e.button) {
             case 0: this.props.onClick();
                     break;
-            case 2: if (this.props.value === Base.mine) this.props.onMineIdentify();
+            case 2: this.props.onMineIdentify();
                     break;
             default:
                     break;

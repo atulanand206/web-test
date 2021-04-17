@@ -5,6 +5,7 @@ import Cell from './Cell';
 import Score from './Score';
 import Calculation from './Calculation';
 import Server from './Server';
+import Config from './Config';
 import Control from './Control';
 class Board extends React.Component {
 
@@ -12,14 +13,15 @@ class Board extends React.Component {
         super(props);
         this.calculation = new Calculation(); 
         this.server = new Server();
-        this.config = { row: Base.row, col: Base.col, mines: Base.mines };
+        this.config = Base.configs[0];
         this.state = {
             cells: [],
             mineHit: false,
             score: 0,
-            minesLeft: Base.mines,
-            startTime: new Date(),
-            gameStarted: false,
+            times: [],
+            time: '00:00:00',
+            minesLeft: this.config.mines,
+            gameActive: false,
             config: Base.configs[0]
         }
         this.handleClick = this.handleClick.bind(this);
@@ -30,9 +32,9 @@ class Board extends React.Component {
     }
 
     handleClick(e, item, i, j) {
-        if (!this.state.gameStarted) this.setState({ startTime: new Date() , gameStarted: true });
         if (item === Base.mine) {
-            this.setState({mineHit: true});
+            this.setState({ mineHit: true });
+            this.pause();
         } else if (item === Base.empty) {
             this.setState({ cells: this.calculation.freeCells(this.state.cells, i, j) });
         } else {
@@ -41,9 +43,10 @@ class Board extends React.Component {
     }
 
     onMineIdentify(e, item, i, j) {
+        const minesLeft = this.state.minesLeft - 1;
         this.setState({
             cells: this.calculation.triggerMine(this.state.cells, i, j), 
-            minesLeft: this.state.minesLeft - 1
+            minesLeft: minesLeft
         });
     }
 
@@ -53,24 +56,69 @@ class Board extends React.Component {
             cells: data, 
             minesLeft: config.mines, 
             mineHit: false,
-            startTime: new Date() 
         }));
+        this.pause();
+        this.resetTimer();
+    }
+
+    resetTimer() {
+        this.setState({
+            times: [],
+            time: '00:00:00'
+        })
+    }
+
+    updateTime() {
+        this.setState({time: this.calculation.getTime(this.state.times)});
+    }
+
+    startTimer() {
+        this.interval = setInterval(() => { this.updateTime(); }, 1000);
+    }
+
+    stopTimer() {
+        if (this.interval) clearInterval(this.interval);
+    }
+
+    play() {
+        if (!this.state.gameActive && !this.state.mineHit) {
+            this.setState({
+                times: this.calculation.addStart(this.state.times), 
+                gameActive: true
+            });
+            this.startTimer();
+        }
+    }
+    
+    pause() {
+        if (this.state.gameActive) {
+            this.setState({
+                times: this.calculation.addEnd(this.state.times), 
+                gameActive: false});
+            this.stopTimer();
+        }
     }
 
     render() {
-        return (
+        return ( 
             <div>
                 <br/>
-                {<Control 
+                {<Config 
                     onConfigChanged={(config) => this.onResetBoard(config)} />}
                 {<Score 
                     score={this.calculation.calculateScore(this.state.cells)} 
                     minesLeft={this.state.minesLeft} 
-                    startTime={this.state.startTime} />}
+                    times={this.state.times}
+                    time={this.state.time}/>}
+                {<Control
+                    play={() => this.play()}
+                    pause={() => this.pause()} 
+                    gameActive={this.state.gameActive}/>}
                 <br/>
                 {this.state.cells.map((element, i) => {
                         return <div className="row-container" key={i}> {element.map((em, j)=> {
                             return <Cell key={i + " " + j} value={em.value} hidden={em.hidden}
+                                        gameActive={this.state.gameActive}
                                         config={this.state.config}
                                         mineHit={this.state.mineHit} disabled={em.disabled}
                                         onClick={(e) => this.handleClick(e, em.value, i, j)}
