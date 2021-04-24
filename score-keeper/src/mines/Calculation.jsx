@@ -29,7 +29,7 @@ class Calculation {
             var s = selections.filter(s => s[0] === r && s[1] === c);
             if (s.length === 0)
                 selections.push([r, c]);
-            Base.directions.map(d => {if (this.isValid(cells, visited, r + d[0], c + d[1])) items.push([r + d[0], c + d[1]]); })
+            Base.directions.forEach(d => {if (this.isValid(cells, visited, r + d[0], c + d[1])) items.push([r + d[0], c + d[1]]); })
         }
         return selections;
     }
@@ -37,7 +37,7 @@ class Calculation {
     freeCells(cells, i, j) {
         const selects = this.emptyNeighbourCells(cells, i, j);
         const sls = [];
-        selects.map(x => {
+        selects.forEach(x => {
             sls.push(x);
             const xx = x[0];
             const xy = x[1];
@@ -56,31 +56,65 @@ class Calculation {
     revealCell(cells, i, j) {
         return cells.map((r, x) => r.map((c, y) => { 
             if (i === x && j === y) 
-                return {
-                    disabled: true, 
-                    value: c.value, 
-                    hidden: false
-                }; 
+                return this.revealedCell(this.disabledCell(c));
             else return c; 
         } ));
     }
 
-    triggerMine(cells, i, j) {
+    revealAll(cells) {
+        return cells.map((r, x) => r.map((c, y) => { 
+            return this.revealedCell(this.disabledCell(c));
+        } ));
+    }
+
+    triggerFlag(cells, i, j) {
         return cells.map((r, x) => r.map((c, y) => { 
             if (i === x && j === y) 
-                return {
-                    disabled: true, 
-                    value: Base.flag, 
-                    hidden: false
-                }; 
+                return this.revealedCell(this.flaggedCell(c)); 
             else return c; 
         } ));
+    }
+
+    minedCell(cell) {
+        return {
+            disabled: true, 
+            value: cell.value, 
+            hidden: false,
+            flagged: true
+        };
+    }
+
+    disabledCell(cell) {
+        return {
+            value: cell.value,
+            disabled: true,
+            hidden: cell.hidden,
+            flagged: cell.flagged
+        }
+    }
+
+    revealedCell(cell) {
+        return {
+            value: cell.value,
+            disabled: cell.disabled,
+            hidden: false,
+            flagged: cell.flagged
+        }
+    }
+
+    flaggedCell(cell) {
+        return {
+            value: cell.value,
+            disabled: cell.disabled,
+            hidden: cell.hidden,
+            flagged: true
+        }
     }
 
     calculateScore(cells) {
         var score = 0;
         if (cells !== undefined)
-            cells.map(r => r.map(c => {
+            cells.forEach(r => r.forEach(c => {
                 if (!c.hidden && c.value.match(Base.numbers) > 0)
                     score += parseInt(c.value);
             }));

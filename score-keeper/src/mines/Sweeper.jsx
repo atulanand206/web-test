@@ -32,6 +32,7 @@ class Board extends React.Component {
     }
 
     handleClick(e, item, i, j) {
+        this.isFinished();
         if (item === Base.mine) {
             this.setState({ mineHit: true });
             this.pause();
@@ -43,9 +44,10 @@ class Board extends React.Component {
     }
 
     onMineIdentify(e, item, i, j) {
+        this.isFinished();
         const minesLeft = this.state.minesLeft - 1;
         this.setState({
-            cells: this.calculation.triggerMine(this.state.cells, i, j), 
+            cells: this.calculation.triggerFlag(this.state.cells, i, j), 
             minesLeft: minesLeft
         });
     }
@@ -99,6 +101,26 @@ class Board extends React.Component {
         }
     }
 
+    isFinished() {
+        console.log(this.state.mineHit);
+        if (!this.state.mineHit && this.state.minesLeft === 0) {
+            this.pause();
+            this.setState({
+                cells: this.calculation.revealAll(this.state.cells)
+            });
+        }
+        this.save();
+    }
+
+    save() {
+        this.server.saveGame({
+            config: this.state.config,
+            times: this.state.times,
+            score: this.calculation.calculateScore(this.state.cells),
+            won: !this.state.mineHit && this.state.minesLeft === 0
+        })
+    }
+
     render() {
         return ( 
             <div>
@@ -118,6 +140,7 @@ class Board extends React.Component {
                 {this.state.cells.map((element, i) => {
                         return <div className="row-container" key={i}> {element.map((em, j)=> {
                             return <Cell key={i + " " + j} value={em.value} hidden={em.hidden}
+                                        flagged={em.flagged}
                                         gameActive={this.state.gameActive}
                                         config={this.state.config}
                                         mineHit={this.state.mineHit} disabled={em.disabled}

@@ -10,7 +10,7 @@ class Cell extends React.Component {
 
     handleClick(e) {
         e.preventDefault();
-        if (this.props.disabled || !this.props.gameActive) {
+        if ((this.props.disabled && !this.props.flagged) || !this.props.gameActive) {
             return;
         }
         switch(e.button) {
@@ -24,8 +24,7 @@ class Cell extends React.Component {
     }
 
     isVisible() {
-        return (!this.props.hidden) || this.props.value === Base.flag 
-                || (this.props.mineHit && this.props.value === Base.mine);
+        return (!this.props.hidden) || (this.props.mineHit && this.props.value === Base.mine);
     }
 
     render() {
@@ -35,7 +34,7 @@ class Cell extends React.Component {
                 className={this.isVisible()? "cell__visible" : "cell"} 
                 onClick={(e) => this.handleClick(e)} 
                 onContextMenu={(e) => this.handleClick(e)}>
-                <p>{this.isVisible() ? this.props.value :  ""}</p>
+                <p>{this.isVisible() ? (this.props.value.flagged ? Base.flag : this.props.value) :  ""}</p>
             </div>
         )
     }
