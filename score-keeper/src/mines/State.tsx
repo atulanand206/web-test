@@ -1,5 +1,11 @@
-import { Item } from './Base';
+import Item from './Base';
 import _ from 'lodash';
+
+export default interface Item {
+    value: string;
+    state: string;
+    disabled: boolean;
+}
 
 export const HIDDEN: string = "HIDDEN";
 export const VISIBLE: string = "VISIBLE";
@@ -11,37 +17,32 @@ export const SHOW: string = "SHOW";
 export const MINE: string = "MINE";
 
 function handleHidden(item: Item, action: string) {
-    let state = item.state;
+    let state: string = item.state;
+    let disabled: boolean = item.disabled;
     switch (action) {
         case (FLAG): state = FLAGGED; break;
-        case (SHOW): state = VISIBLE; break;
-        case (MINE): state = MINED; break;
+        case (SHOW): state = VISIBLE; disabled = true; break;
+        case (MINE): state = MINED; disabled = true; break;
     }
-    return _.merge(item, { state: state, disabled: true });
-}
-
-function handleVisible(item: Item, action: string) {
-    return _.merge(item, { state: VISIBLE, disable: true });
+    return _.merge(item, { state: state, disabled: disabled });
 }
 
 function handleFlagged(item: Item, action: string) {
     let state: string = item.state;
+    let disabled: boolean = item.disabled;
     switch (action) {
-        case (SHOW): state = VISIBLE; break;
-        case (MINE): state = MINED; break;
+        case (SHOW): state = VISIBLE; disabled = true; break;
+        case (MINE): state = MINED; disabled = true; break;
     }
-    return _.merge(item, { state: state, disabled: true });
+    return _.merge(item, { state: state, disabled: disabled });
 }
 
-function handleMined(item: Item, action: string) {
-    return _.merge(item, { state: MINED, disabled: true });
-}
-
-function handleState(item: Item, action: string) {
+export function handleState(item: Item, action: string) {
+    if (item.disabled) return item;
     switch (item.state) {
         case (HIDDEN): return handleHidden(item, action);
-        case (VISIBLE): return handleVisible(item, action);
+        case (VISIBLE): return item;
         case (FLAGGED): return handleFlagged(item, action);
-        case (MINED): return handleMined(item, action);
+        case (MINED): return item;
     }
 }
