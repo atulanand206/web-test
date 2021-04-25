@@ -13,22 +13,22 @@ class Cell extends React.Component {
         if (this.props.disabled || !this.props.gameActive) {
             return;
         }
-        switch(e.button) {
+        switch (e.button) {
             case 0: this.props.onClick();
-                    break;
+                break;
             case 2: this.props.onMineIdentify();
-                    break;
+                break;
             default:
-                    break;
+                break;
         }
     }
 
     render() {
         return (
-            <div 
-                style={State.isVisible(this.props.state) ? { backgroundColor: this.props.config.darker } : { backgroundColor: this.props.config.color }}
-                className={State.isVisible(this.props.state) ? "cell__visible" : "cell"} 
-                onClick={(e) => this.handleClick(e)} 
+            <div
+                style={State.isVisible(this.props.state) || State.isMined(this.props.state) ? { backgroundColor: this.props.config.darker } : { backgroundColor: this.props.config.color }}
+                className={State.isVisible(this.props.state) ? "cell__visible" : "cell"}
+                onClick={(e) => this.handleClick(e)}
                 onContextMenu={(e) => this.handleClick(e)}>
                 {State.isHidden(this.props.state) && <p></p>}
                 {State.isVisible(this.props.state) && <p>{this.props.value}</p>}

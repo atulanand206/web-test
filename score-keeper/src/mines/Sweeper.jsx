@@ -4,7 +4,15 @@ import Base from "./Base";
 import Cell from './Cell';
 import Score from './Score';
 import Calculation from './Calculation/Calculation';
-import { minedCells, calculateScore } from './Calculation/Calc';
+import {
+    emptyCells,
+    minedCells,
+    revealCell,
+    minesHidden,
+    minesLeft,
+    calculateScore,
+    triggerFlag
+} from './Calculation/Calc';
 import Server from './Server';
 import Config from './Config';
 import Control from './Control';
@@ -12,7 +20,7 @@ class Board extends React.Component {
 
     constructor(props) {
         super(props);
-        this.calculation = new Calculation(); 
+        this.calculation = new Calculation();
         this.server = new Server();
         this.config = Base.configs[0];
         this.state = {
@@ -30,38 +38,38 @@ class Board extends React.Component {
 
     componentDidMount() {
         this.server.fetchBoard(this.config, (data) => {
-            this.setState({cells: data });
-            console.log(JSON.stringify(data));
+            this.setState({ cells: data });
         });
     }
 
     handleClick(e, item, i, j) {
-        console.log(item);
         if (item.value === Base.mine) {
+            console.log(JSON.stringify(this.state.cells));
             this.setState({ mineHit: true, cells: minedCells(this.state.cells, i, j) });
             this.pause();
+            console.log(JSON.stringify(this.state.cells));
         } else if (item.value === Base.empty) {
-            this.setState({ cells: this.calculation.freeCells(this.state.cells, i, j) });
+            this.setState({ cells: emptyCells(this.state.cells, i, j) });
         } else {
-            this.setState({ cells: this.calculation.revealCell(this.state.cells, i, j) });
+            this.setState({ cells: revealCell(this.state.cells, i, j) });
         }
         this.isFinished();
     }
 
     onMineIdentify(e, item, i, j) {
-        const minesLeft = this.state.minesLeft - 1;
+        const mines = minesLeft(this.state.cells, this.state.config.mines);
         this.setState({
-            cells: this.calculation.triggerFlag(this.state.cells, i, j), 
-            minesLeft: minesLeft
+            cells: triggerFlag(this.state.cells, i, j),
+            minesLeft: mines
         });
         this.isFinished();
     }
 
     onResetBoard(config) {
         this.setState({ config: config });
-        this.server.fetchBoard(config, (data) => this.setState({ 
-            cells: data, 
-            minesLeft: config.mines, 
+        this.server.fetchBoard(config, (data) => this.setState({
+            cells: data,
+            minesLeft: config.mines,
             mineHit: false,
         }));
         this.pause();
@@ -76,7 +84,7 @@ class Board extends React.Component {
     }
 
     updateTime() {
-        this.setState({time: this.calculation.getTime(this.state.times)});
+        this.setState({ time: this.calculation.getTime(this.state.times) });
     }
 
     startTimer() {
@@ -90,29 +98,27 @@ class Board extends React.Component {
     play() {
         if (!this.state.gameActive && !this.state.mineHit) {
             this.setState({
-                times: this.calculation.addStart(this.state.times), 
+                times: this.calculation.addStart(this.state.times),
                 gameActive: true
             });
             this.startTimer();
         }
     }
-    
+
     pause() {
         if (this.state.gameActive) {
             this.setState({
-                times: this.calculation.addEnd(this.state.times), 
-                gameActive: false});
+                times: this.calculation.addEnd(this.state.times),
+                gameActive: false
+            });
             this.stopTimer();
         }
     }
 
     isFinished() {
         console.log(this.state.mineHit);
-        if (!this.state.mineHit && this.state.minesLeft === 0) {
+        if (!this.state.mineHit && minesHidden(this.state.cells) === 0) {
             this.pause();
-            this.setState({
-                cells: this.calculation.revealAll(this.state.cells)
-            });
         }
         this.save();
     }
@@ -127,34 +133,34 @@ class Board extends React.Component {
     }
 
     render() {
-        return ( 
+        return (
             <div>
-                <br/>
-                {<Config 
+                <br />
+                {<Config
                     onConfigChanged={(config) => this.onResetBoard(config)} />}
-                {<Score 
-                    score={calculateScore(this.state.cells)} 
-                    minesLeft={this.state.minesLeft} 
+                {<Score
+                    score={calculateScore(this.state.cells)}
+                    minesLeft={minesLeft(this.state.cells, this.state.config.mines, this.state.mineHit)}
                     times={this.state.times}
-                    time={this.state.time}/>}
+                    time={this.state.time} />}
                 {<Control
                     play={() => this.play()}
-                    pause={() => this.pause()} 
-                    gameActive={this.state.gameActive}/>}
-                <br/>
+                    pause={() => this.pause()}
+                    gameActive={this.state.gameActive} />}
+                <br />
                 {this.state.cells.map((element, i) => {
-                        return <div className="row-container" key={i}> {element.map((em, j)=> {
-                            return <Cell key={i + " " + j} value={em.value} state={em.state}
-                                        gameActive={this.state.gameActive}
-                                        config={this.state.config}
-                                        mineHit={this.state.mineHit} disabled={em.disabled}
-                                        onClick={(e) => this.handleClick(e, em, i, j)}
-                                        onMineIdentify={(e) => this.onMineIdentify(e, em, i, j)}/>
-                        })} 
-                        </div> 
-                    })
+                    return <div className="row-container" key={i}> {element.map((em, j) => {
+                        return <Cell key={i + " " + j} value={em.value} state={em.state}
+                            gameActive={this.state.gameActive}
+                            config={this.state.config}
+                            mineHit={this.state.mineHit} disabled={em.disabled}
+                            onClick={(e) => this.handleClick(e, em, i, j)}
+                            onMineIdentify={(e) => this.onMineIdentify(e, em, i, j)} />
+                    })}
+                    </div>
+                })
                 }
-            </div> 
+            </div>
         )
     }
 }
