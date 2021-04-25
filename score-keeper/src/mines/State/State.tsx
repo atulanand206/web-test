@@ -1,7 +1,6 @@
-import Item from './Base';
 import _ from 'lodash';
 
-export default interface Item {
+export interface Item {
     value: string;
     state: string;
     disabled: boolean;
@@ -45,4 +44,20 @@ export function handleState(item: Item, action: string) {
         case (FLAGGED): return handleFlagged(item, action);
         case (MINED): return item;
     }
+}
+
+export function isHidden(state: string): boolean {
+    return state === HIDDEN;
+}
+
+export function isVisible(state: string): boolean {
+    return state === VISIBLE;
+}
+
+export function isFlagged(state: string): boolean {
+    return state === FLAGGED;
+}
+
+export function isMined(state: string): boolean {
+    return state === MINED;
 }

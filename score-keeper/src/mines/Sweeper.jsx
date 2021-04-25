@@ -3,7 +3,8 @@ import './Sweeper.scss';
 import Base from "./Base";
 import Cell from './Cell';
 import Score from './Score';
-import Calculation from './Calculation';
+import Calculation from './Calculation/Calculation';
+import { minedCells, calculateScore } from './Calculation/Calc';
 import Server from './Server';
 import Config from './Config';
 import Control from './Control';
@@ -28,28 +29,32 @@ class Board extends React.Component {
     }
 
     componentDidMount() {
-        this.server.fetchBoard(this.config, (data) => this.setState({cells: data }));
+        this.server.fetchBoard(this.config, (data) => {
+            this.setState({cells: data });
+            console.log(JSON.stringify(data));
+        });
     }
 
     handleClick(e, item, i, j) {
-        this.isFinished();
-        if (item === Base.mine) {
-            this.setState({ mineHit: true });
+        console.log(item);
+        if (item.value === Base.mine) {
+            this.setState({ mineHit: true, cells: minedCells(this.state.cells, i, j) });
             this.pause();
-        } else if (item === Base.empty) {
+        } else if (item.value === Base.empty) {
             this.setState({ cells: this.calculation.freeCells(this.state.cells, i, j) });
         } else {
             this.setState({ cells: this.calculation.revealCell(this.state.cells, i, j) });
         }
+        this.isFinished();
     }
 
     onMineIdentify(e, item, i, j) {
-        this.isFinished();
         const minesLeft = this.state.minesLeft - 1;
         this.setState({
             cells: this.calculation.triggerFlag(this.state.cells, i, j), 
             minesLeft: minesLeft
         });
+        this.isFinished();
     }
 
     onResetBoard(config) {
@@ -116,7 +121,7 @@ class Board extends React.Component {
         this.server.saveGame({
             config: this.state.config,
             times: this.state.times,
-            score: this.calculation.calculateScore(this.state.cells),
+            score: calculateScore(this.state.cells),
             won: !this.state.mineHit && this.state.minesLeft === 0
         })
     }
@@ -128,7 +133,7 @@ class Board extends React.Component {
                 {<Config 
                     onConfigChanged={(config) => this.onResetBoard(config)} />}
                 {<Score 
-                    score={this.calculation.calculateScore(this.state.cells)} 
+                    score={calculateScore(this.state.cells)} 
                     minesLeft={this.state.minesLeft} 
                     times={this.state.times}
                     time={this.state.time}/>}
@@ -139,12 +144,11 @@ class Board extends React.Component {
                 <br/>
                 {this.state.cells.map((element, i) => {
                         return <div className="row-container" key={i}> {element.map((em, j)=> {
-                            return <Cell key={i + " " + j} value={em.value} hidden={em.hidden}
-                                        flagged={em.flagged}
+                            return <Cell key={i + " " + j} value={em.value} state={em.state}
                                         gameActive={this.state.gameActive}
                                         config={this.state.config}
                                         mineHit={this.state.mineHit} disabled={em.disabled}
-                                        onClick={(e) => this.handleClick(e, em.value, i, j)}
+                                        onClick={(e) => this.handleClick(e, em, i, j)}
                                         onMineIdentify={(e) => this.onMineIdentify(e, em, i, j)}/>
                         })} 
                         </div> 

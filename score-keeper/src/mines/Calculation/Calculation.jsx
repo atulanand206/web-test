@@ -1,4 +1,19 @@
-import Base from './Base';
+import Base from './../Base';
+import Item, { handleState } from './../State/State';
+import * as State from './../State/State';
+import _ from 'lodash';
+
+export function calculateScore(cells) {
+    console.log(cells);
+    var score = 0;
+    if (cells !== undefined)
+        cells.forEach(r => r.forEach(c => {
+            console.log(State.isVisible(c));
+            if (State.isVisible(c) && c.value.match(Base.numbers) > 0)
+                score += parseInt(c.value);
+        }));
+    return score;
+}
 
 class Calculation {
 
@@ -46,7 +61,7 @@ class Calculation {
         const st = cells.map((row, rx) => row.map((col, cx) => { 
             var s = sls.filter(s => s[0] === rx && s[1] === cx);
             if(s.length !== 0) {
-                return {disabled: true, value: col.value, hidden: false};
+                return handleState(s, State.SHOW);
             }
             return col;
         } ));
@@ -56,69 +71,23 @@ class Calculation {
     revealCell(cells, i, j) {
         return cells.map((r, x) => r.map((c, y) => { 
             if (i === x && j === y) 
-                return this.revealedCell(this.disabledCell(c));
+                return handleState(c, State.SHOW);
             else return c; 
         } ));
     }
 
     revealAll(cells) {
         return cells.map((r, x) => r.map((c, y) => { 
-            return this.revealedCell(this.disabledCell(c));
+            return handleState(c, State.SHOW);
         } ));
     }
 
     triggerFlag(cells, i, j) {
         return cells.map((r, x) => r.map((c, y) => { 
             if (i === x && j === y) 
-                return this.revealedCell(this.flaggedCell(c)); 
+                return handleState(c, State.FLAG); 
             else return c; 
         } ));
-    }
-
-    minedCell(cell) {
-        return {
-            disabled: true, 
-            value: cell.value, 
-            hidden: false,
-            flagged: true
-        };
-    }
-
-    disabledCell(cell) {
-        return {
-            value: cell.value,
-            disabled: true,
-            hidden: cell.hidden,
-            flagged: cell.flagged
-        }
-    }
-
-    revealedCell(cell) {
-        return {
-            value: cell.value,
-            disabled: cell.disabled,
-            hidden: false,
-            flagged: cell.flagged
-        }
-    }
-
-    flaggedCell(cell) {
-        return {
-            value: cell.value,
-            disabled: cell.disabled,
-            hidden: cell.hidden,
-            flagged: true
-        }
-    }
-
-    calculateScore(cells) {
-        var score = 0;
-        if (cells !== undefined)
-            cells.forEach(r => r.forEach(c => {
-                if (!c.hidden && c.value.match(Base.numbers) > 0)
-                    score += parseInt(c.value);
-            }));
-        return score;
     }
 
     addStart(times) {

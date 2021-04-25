@@ -1,6 +1,6 @@
 import React from 'react';
 import "./Sweeper.scss";
-import Base from "./Base";
+import * as State from './State/State';
 
 class Cell extends React.Component {
     constructor(props) {
@@ -10,7 +10,7 @@ class Cell extends React.Component {
 
     handleClick(e) {
         e.preventDefault();
-        if ((this.props.disabled && !this.props.flagged) || !this.props.gameActive) {
+        if (this.props.disabled || !this.props.gameActive) {
             return;
         }
         switch(e.button) {
@@ -23,18 +23,17 @@ class Cell extends React.Component {
         }
     }
 
-    isVisible() {
-        return (!this.props.hidden) || (this.props.mineHit && this.props.value === Base.mine);
-    }
-
     render() {
         return (
             <div 
-                style={this.isVisible() ? { backgroundColor: this.props.config.darker } : { backgroundColor: this.props.config.color }}
-                className={this.isVisible()? "cell__visible" : "cell"} 
+                style={State.isVisible(this.props.state) ? { backgroundColor: this.props.config.darker } : { backgroundColor: this.props.config.color }}
+                className={State.isVisible(this.props.state) ? "cell__visible" : "cell"} 
                 onClick={(e) => this.handleClick(e)} 
                 onContextMenu={(e) => this.handleClick(e)}>
-                <p>{this.isVisible() ? (this.props.value.flagged ? Base.flag : this.props.value) :  ""}</p>
+                {State.isHidden(this.props.state) && <p></p>}
+                {State.isVisible(this.props.state) && <p>{this.props.value}</p>}
+                {State.isFlagged(this.props.state) && <img src='flag.svg' alt='Flagged cell' />}
+                {State.isMined(this.props.state) && <img src='mine.svg' alt='Mined cell' />}
             </div>
         )
     }

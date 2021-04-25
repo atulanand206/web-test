@@ -1,15 +1,14 @@
 import * as chai from 'chai';
-import chaiHttp = require('chai-http');
-chai.use(chaiHttp);
 import * as State from './State';
-import Item from './State';
+import { Item } from './State';
+import { minedCells, calculateScore } from '../Calculation/Calc';
 
-export const Transition = {
-    HIDDEN: { FLAG: true, SHOW: true, MINE: true }, 
-    VISIBLE: { FLAG: false, SHOW: false, MINE: false },
-    FLAGGED: { FLAG: false, SHOW: true, MINE: true },
-    MINED: { FLAG: false, SHOW: false, MINE: false }
-};
+// const Transition = {
+//     HIDDEN: { FLAG: true, SHOW: true, MINE: true }, 
+//     VISIBLE: { FLAG: false, SHOW: false, MINE: false },
+//     FLAGGED: { FLAG: false, SHOW: true, MINE: true },
+//     MINED: { FLAG: false, SHOW: false, MINE: false }
+// };
 
 describe('State transition', function() {
 
@@ -75,5 +74,47 @@ describe('State transition', function() {
     it('should not change state for a mined item on mine action', function() {
         testStateChange({ value: '10', state: State.MINED, disabled: true }, 
         State.MINE, { value: '10', state: State.MINED, disabled: true });
+    });
+});
+
+describe('Cell manipulation', function() {
+
+    const cells = [
+        [
+          { "disabled": false, "value": "1", "state": "HIDDEN" },
+          { "disabled": false, "value": "*", "state": "HIDDEN" }
+        ],
+        [
+          { "disabled": false, "value": "1", "state": "HIDDEN" },
+          { "disabled": false, "value": "1", "state": "HIDDEN" }
+        ]
+    ];
+
+    it('should make mines visible when mined cells is called', function() {
+        const expectation = [
+            [
+              { "disabled": false, "value": "1", "state": "HIDDEN" },
+              { "disabled": true, "value": "*", "state": "MINED" }
+            ],
+            [
+              { "disabled": false, "value": "1", "state": "HIDDEN" },
+              { "disabled": false, "value": "1", "state": "HIDDEN" }
+            ]
+        ];
+        chai.expect(expectation).deep.equal(minedCells(cells, 0, 0));
+    });
+
+    it('should calculate the score of numbered visible cells', function() {
+        const board = [
+            [
+              { "disabled": false, "value": "1", "state": "VISIBLE" },
+              { "disabled": false, "value": "*", "state": "VISIBLE" }
+            ],
+            [
+              { "disabled": false, "value": "1", "state": "HIDDEN" },
+              { "disabled": false, "value": "1", "state": "VISIBLE" }
+            ]
+        ];
+        chai.expect(2).equal(calculateScore(board));
     });
 });
