@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as State from './State';
 import { Item } from './State';
-import { minedCells, calculateScore } from '../Calculation/Calc';
+import { minedCells, calculateScore, emptyBooleanMatrix, isValidForVisitation } from '../Calculation/Calc';
 
 // const Transition = {
 //     HIDDEN: { FLAG: true, SHOW: true, MINE: true }, 
@@ -79,26 +79,40 @@ describe('State transition', function() {
 
 describe('Cell manipulation', function() {
 
-    const cells = [
-        [
-          { "disabled": false, "value": "1", "state": "HIDDEN" },
-          { "disabled": false, "value": "*", "state": "HIDDEN" }
-        ],
-        [
-          { "disabled": false, "value": "1", "state": "HIDDEN" },
-          { "disabled": false, "value": "1", "state": "HIDDEN" }
-        ]
-    ];
-
-    it('should make mines visible when mined cells is called', function() {
-        const expectation = [
+    it('should create a boolean matrix of same size as cells', function() {
+        const cells = [
+            [
+              { "disabled": false, "value": "1", "state": "VISIBLE" },
+              { "disabled": false, "value": "*", "state": "HIDDEN" }
+            ],
             [
               { "disabled": false, "value": "1", "state": "HIDDEN" },
+              { "disabled": false, "value": "1", "state": "FLAGGED" }
+            ]
+        ];
+        const expectation = [[false, false], [false, false]];
+        chai.expect(expectation).deep.equal(emptyBooleanMatrix(cells));
+    });
+
+    it('should make mines visible when mined cells is called', function() {
+        const cells = [
+            [
+              { "disabled": false, "value": "1", "state": "VISIBLE" },
+              { "disabled": false, "value": "*", "state": "HIDDEN" }
+            ],
+            [
+              { "disabled": false, "value": "1", "state": "HIDDEN" },
+              { "disabled": false, "value": "1", "state": "FLAGGED" }
+            ]
+        ];
+        const expectation = [
+            [
+              { "disabled": false, "value": "1", "state": "VISIBLE" },
               { "disabled": true, "value": "*", "state": "MINED" }
             ],
             [
               { "disabled": false, "value": "1", "state": "HIDDEN" },
-              { "disabled": false, "value": "1", "state": "HIDDEN" }
+              { "disabled": false, "value": "1", "state": "FLAGGED" }
             ]
         ];
         chai.expect(expectation).deep.equal(minedCells(cells, 0, 0));
@@ -116,5 +130,23 @@ describe('Cell manipulation', function() {
             ]
         ];
         chai.expect(2).equal(calculateScore(board));
+    });
+
+    it('should check if the cell at coordinates is empty and hidden', function() {
+        const board = [
+            [
+              { "disabled": true, "value": "1", "state": "VISIBLE" },
+              { "disabled": false, "value": " ", "state": "HIDDEN" }
+            ],
+            [
+              { "disabled": false, "value": "1", "state": "HIDDEN" },
+              { "disabled": true, "value": " ", "state": "VISIBLE" }
+            ]
+        ];
+        const visited = [[true, false], [false, true]];
+        chai.expect(true).equal(isValidForVisitation(board, visited, 0, 1))
+        chai.expect(false).equal(isValidForVisitation(board, visited, 0, 0))
+        chai.expect(false).equal(isValidForVisitation(board, visited, 1, 0))
+        chai.expect(false).equal(isValidForVisitation(board, visited, 1, 1))
     });
 });

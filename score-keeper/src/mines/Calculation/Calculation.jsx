@@ -1,38 +1,12 @@
 import Base from './../Base';
 import Item, { handleState } from './../State/State';
+import { emptyBooleanMatrix, isValidForVisitation } from './Calc';
 import * as State from './../State/State';
 import _ from 'lodash';
-
-export function calculateScore(cells) {
-    console.log(cells);
-    var score = 0;
-    if (cells !== undefined)
-        cells.forEach(r => r.forEach(c => {
-            console.log(State.isVisible(c));
-            if (State.isVisible(c) && c.value.match(Base.numbers) > 0)
-                score += parseInt(c.value);
-        }));
-    return score;
-}
-
 class Calculation {
 
-    emptyBooleanMatrix(cells) {
-        return cells.map(x => x.map(y => false));
-    }
-
-    isValid(cells, vis, x, y) {
-        if (isNaN(x) || isNaN(y) || x === undefined || y === undefined)
-            return false;
-        if (x < 0 || y < 0 || x >= vis.length || y >= vis[0].length || vis[x][y])
-            return false;
-        if (cells[x][y].value !== Base.empty)
-            return false;
-        return cells[x][y].value === Base.empty;
-    }
-
     emptyNeighbourCells(cells, x, y) {
-        var visited = this.emptyBooleanMatrix(cells);
+        var visited = emptyBooleanMatrix(cells);
         const selections = [];
         const items = [];
         items.push([x, y]);
@@ -44,7 +18,7 @@ class Calculation {
             var s = selections.filter(s => s[0] === r && s[1] === c);
             if (s.length === 0)
                 selections.push([r, c]);
-            Base.directions.forEach(d => {if (this.isValid(cells, visited, r + d[0], c + d[1])) items.push([r + d[0], c + d[1]]); })
+            Base.directions.forEach(d => {if (isValidForVisitation(cells, visited, r + d[0], c + d[1])) items.push([r + d[0], c + d[1]]); })
         }
         return selections;
     }
