@@ -11,7 +11,8 @@ import {
     revealCell,
     triggerFlag,
     minesHidden,
-    minesLeft
+    minesLeft,
+    showNumberCells
 } from '../Calculation/Calc';
 
 // const Transition = {
@@ -308,5 +309,29 @@ describe('Cell manipulation', function () {
             ]
         ];
         chai.expect(expectation).deep.equal(minedCells(cells, 0, 1));
+    });
+
+    it('should make numbers visible when showNumberCells is called', function () {
+        const cells = [
+            [
+                { "disabled": false, "value": "1", "state": "HIDDEN" },
+                { "disabled": false, "value": "*", "state": "FLAGGED" }
+            ],
+            [
+                { "disabled": false, "value": "1", "state": "HIDDEN" },
+                { "disabled": false, "value": "1", "state": "HIDDEN" }
+            ]
+        ];
+        const expectation = [
+            [
+                { "disabled": true, "value": "1", "state": "VISIBLE" },
+                { "disabled": false, "value": "*", "state": "FLAGGED" }
+            ],
+            [
+                { "disabled": true, "value": "1", "state": "VISIBLE" },
+                { "disabled": true, "value": "1", "state": "VISIBLE" }
+            ]
+        ];
+        chai.expect(expectation).deep.equal(showNumberCells(cells));
     });
 });

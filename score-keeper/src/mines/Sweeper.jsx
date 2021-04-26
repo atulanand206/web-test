@@ -9,6 +9,7 @@ import {
     minedCells,
     revealCell,
     minesHidden,
+    showNumberCells,
     minesLeft,
     calculateScore,
     triggerFlag
@@ -31,7 +32,9 @@ class Board extends React.Component {
             time: '00:00:00',
             minesLeft: this.config.mines,
             gameActive: false,
-            config: Base.configs[0]
+            config: Base.configs[0],
+            heading: "Welcome to minesweeper",
+            instructions: "Flag all the mines to win."
         }
         this.handleClick = this.handleClick.bind(this);
     }
@@ -45,7 +48,11 @@ class Board extends React.Component {
     handleClick(e, item, i, j) {
         if (item.value === Base.mine) {
             console.log(JSON.stringify(this.state.cells));
-            this.setState({ mineHit: true, cells: minedCells(this.state.cells, i, j) });
+            this.setState({ 
+                mineHit: true, 
+                instructions: "You played well, you just weren't lucky enough!",
+                cells: minedCells(this.state.cells, i, j) 
+            });
             this.pause();
             console.log(JSON.stringify(this.state.cells));
         } else if (item.value === Base.empty) {
@@ -65,12 +72,25 @@ class Board extends React.Component {
         this.isFinished();
     }
 
+    isFinished() {
+        console.log(this.state.mineHit);
+        if (!this.state.mineHit && minesHidden(this.state.cells) === 0) {
+            this.setState({ 
+                // cells: showNumberCells(this.state.cells),
+                instructions: "You are the master, keep conquering."
+            });
+            this.pause();
+        }
+        this.save();
+    }
+
     onResetBoard(config) {
         this.setState({ config: config });
         this.server.fetchBoard(config, (data) => this.setState({
             cells: data,
             minesLeft: config.mines,
             mineHit: false,
+            instructions: "Flag all the mines to win."
         }));
         this.pause();
         this.resetTimer();
@@ -115,14 +135,6 @@ class Board extends React.Component {
         }
     }
 
-    isFinished() {
-        console.log(this.state.mineHit);
-        if (!this.state.mineHit && minesHidden(this.state.cells) === 0) {
-            this.pause();
-        }
-        this.save();
-    }
-
     save() {
         this.server.saveGame({
             config: this.state.config,
@@ -136,6 +148,7 @@ class Board extends React.Component {
         return (
             <div className='page'>
                 <br />
+                <div className='text__heading'>{this.state.heading}</div>
                 {<Config
                     onConfigChanged={(config) => this.onResetBoard(config)} />}
                 {<Score
@@ -148,6 +161,7 @@ class Board extends React.Component {
                     pause={() => this.pause()}
                     gameActive={this.state.gameActive} />}
                 <br />
+                <div className='text__instruction'>{this.state.instructions}</div>
                 <div className='board'>
                     {this.state.cells.map((element, i) => {
                         return <div className="row-container" key={i}> {element.map((em, j) => {

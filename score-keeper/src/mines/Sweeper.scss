@@ -38,6 +38,7 @@ body {
     cursor: pointer;
 
     &__visible {
+        font-family: Courier;
         background-color: var(--cell-color-hover);
         height: 32px;
         width: 32px;
@@ -58,6 +59,7 @@ body {
     width: 30%;
 
     & > * {
+        font-family: Courier;
         color: white;
         width: 100%;
         padding: 10px;
@@ -72,6 +74,7 @@ body {
     float: right;
 
     & > * {
+        font-family: Courier;
         color: white;
         width: 100%;
         padding: 10px;
@@ -99,4 +102,20 @@ if, p {
     width: 32px;
     height: 32px;
     cursor: pointer;
+}
+
+.text {
+    &__heading {
+        font-family: Courier;
+        color: white;
+        margin: 4px;
+        font-size: 3em;
+    }
+
+    &__instruction {
+        font-family: Courier;
+        color: white;
+        margin: 24px;
+        font-size: 2em;
+    }
 }

@@ -69,6 +69,10 @@ export function triggerFlag(cells: Item[][], i: number, j: number) {
     }));
 }
 
+export function showNumberCells(cells: Item[][]) {
+    return cells.map(row => row.map(col => { if (col.value.match(Base.numbers) !== null) return handleState(col, State.SHOW); return col; }));
+}
+
 export function minedCells(cells: Item[][], i: number, j: number) {
     return cells.map(row => row.map(col => { if (col.value === Base.mine) return handleState(col, State.MINE); return col; }));
 }
