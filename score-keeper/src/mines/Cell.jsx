@@ -32,8 +32,8 @@ class Cell extends React.Component {
                 onContextMenu={(e) => this.handleClick(e)}>
                 {State.isHidden(this.props.state) && <p></p>}
                 {State.isVisible(this.props.state) && <p>{this.props.value}</p>}
-                {State.isFlagged(this.props.state) && <img src='flag.svg' alt='Flagged cell' />}
-                {State.isMined(this.props.state) && <img src='mine.svg' alt='Mined cell' />}
+                {State.isFlagged(this.props.state) && <img className='icon-container' src='flag.svg' alt='Flagged cell' />}
+                {State.isMined(this.props.state) && <img className='icon-container' src='mine.svg' alt='Mined cell' />}
             </div>
         )
     }

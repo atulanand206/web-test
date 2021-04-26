@@ -4,13 +4,26 @@
     --cell-border: slategray
 }
 
+body {
+    height: 100%;
+    background-color: darkslategray;
+}
+
+.page {
+    height: 100%;
+}
+
+.board {
+    width: fit-content;
+    display: inline-block;
+}
+
 .row-container {
+    width: fit-content;
+    background-color: white;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     flex-wrap: wrap;
-    align-items: center;    
-    
+    justify-content: center;
 }
 
 .cell {
@@ -42,21 +55,29 @@
 
 .score-container {
     display: flex;
-    justify-content: center;
-    flex-direction: row;
-    align-items: center;
-    align-self: center;
-    
-    &__left {
-        padding: 10px;
-        float: left;
-        margin-left: 0%;
-    }
+    width: 30%;
 
-    &__right {
+    & > * {
+        color: white;
+        width: 100%;
         padding: 10px;
-        float: right;
-        margin-right: 0%;
+        align-self: center;
+        justify-content: center;
+    }
+}
+
+.config-container {
+    display: flex;
+    width: 30%;
+    float: right;
+
+    & > * {
+        color: white;
+        width: 100%;
+        padding: 10px;
+        align-self: center;
+        justify-content: center;
+        cursor: pointer;
     }
 }
 
@@ -67,26 +88,14 @@ if, p {
 
 .control-container {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     align-self: center;
     justify-content: center;
 }
 
-.config-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    float: right;
-}
-
-.control-item {
-    padding: 10px;
-    width: 100px;
-    cursor: pointer;
-}
-
 .icon-container {
+    margin: auto;
+    margin-top: 3px;
+    filter: hue-rotate(90deg);
     width: 32px;
     height: 32px;
     cursor: pointer;

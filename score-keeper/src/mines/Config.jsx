@@ -17,7 +17,7 @@ class Config extends React.Component {
         return (
             <div className='config-container'>
                 {this.configs.map((config, i) => {
-                    return <div className='control-item' key={i} onClick={() => this.handleClick(config)} >{config.name}</div>
+                    return <div key={i} onClick={() => this.handleClick(config)} >{config.name}</div>
                 })}
             </div>
         )

@@ -134,7 +134,7 @@ class Board extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className='page'>
                 <br />
                 {<Config
                     onConfigChanged={(config) => this.onResetBoard(config)} />}
@@ -148,18 +148,19 @@ class Board extends React.Component {
                     pause={() => this.pause()}
                     gameActive={this.state.gameActive} />}
                 <br />
-                {this.state.cells.map((element, i) => {
-                    return <div className="row-container" key={i}> {element.map((em, j) => {
-                        return <Cell key={i + " " + j} value={em.value} state={em.state}
-                            gameActive={this.state.gameActive}
-                            config={this.state.config}
-                            mineHit={this.state.mineHit} disabled={em.disabled}
-                            onClick={(e) => this.handleClick(e, em, i, j)}
-                            onMineIdentify={(e) => this.onMineIdentify(e, em, i, j)} />
+                <div className='board'>
+                    {this.state.cells.map((element, i) => {
+                        return <div className="row-container" key={i}> {element.map((em, j) => {
+                            return <Cell key={i + " " + j} value={em.value} state={em.state}
+                                gameActive={this.state.gameActive}
+                                config={this.state.config}
+                                mineHit={this.state.mineHit} disabled={em.disabled}
+                                onClick={(e) => this.handleClick(e, em, i, j)}
+                                onMineIdentify={(e) => this.onMineIdentify(e, em, i, j)} />
+                        })}
+                        </div>
                     })}
-                    </div>
-                })
-                }
+                </div>
             </div>
         )
     }

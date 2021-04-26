@@ -13,9 +13,9 @@ class Score extends React.Component {
     render() {
         return (
             <div className='score-container'>
-                <div className='score-container__left'>Score: {this.props.score}</div>
-                <div className='score-container__left'>Time: {this.props.time}</div>
-                <div className='score-container__right'>Mines Left: {this.props.minesLeft}</div>
+                <div>Score: {this.props.score}</div>
+                <div>Time: {this.props.time}</div>
+                <div>Mines Left: {this.props.minesLeft}</div>
             </div>
         )
     }
