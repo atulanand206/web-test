@@ -35,7 +35,6 @@ class Board extends React.Component {
             minesLeft: this.config.mines,
             gameActive: false,
             config: Base.configs[0],
-            heading: "Welcome to minesweeper",
             instructions: "Flag all the mines to win."
         }
         this.handleClick = this.handleClick.bind(this);
@@ -150,11 +149,14 @@ class Board extends React.Component {
 
     render() {
         return (
-            <div className='page'>
-                <br />
-                <div className='text__heading'>{this.state.heading}</div>
+            <div className='container'>
                 {<Config
                     onConfigChanged={(config) => this.onResetBoard(config)} />}
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
                 {<Score
                     score={calculateScore(this.state.cells)}
                     minesLeft={minesLeft(this.state.cells, this.state.config.mines, this.state.mineHit)}
@@ -165,7 +167,7 @@ class Board extends React.Component {
                     pause={() => this.pause()}
                     gameActive={this.state.gameActive} />}
                 <br />
-                <div className='text__instruction'>{this.state.instructions}</div>
+                <h3>{this.state.instructions}</h3>
                 <div className='board'>
                     {this.state.cells.map((element, i) => {
                         return <div className="row-container" key={i}> {element.map((em, j) => {

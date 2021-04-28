@@ -39,7 +39,7 @@ function handleFlagged(item: Item, action: string) {
 
 export function handleState(item: Item, action: string) {
     if (item.disabled) return item;
-    if (action === STOP) item = _.merge(item, { disabled: true });
+    if (action === STOP) return _.merge(item, { disabled: true });
     switch (item.state) {
         case (HIDDEN): return handleHidden(item, action);
         case (VISIBLE): return item;

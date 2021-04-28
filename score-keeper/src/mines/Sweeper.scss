@@ -1,92 +1,105 @@
 :root {
-    --cell-color: tomato;
-    --cell-color-hover: firebrick;
-    --cell-border: slategray
+    --color-white: white;
+    --color-cell: tomato;
+    --color-cell__hover: firebrick;
+    --color-cell__border: slategray;
+    --color-header-background: rgb(192, 86, 70);
+    --color-navigation-background: rgb(212, 115, 100);
+    --color-background: darkslategray;
+    --color-accent: #900000;
+    --font-family-primary: Courier;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body,
+header
+div {
+    margin: 0;
+}
+
+h1,
+h3,
+h4,
+p {
+    color: var(--color-white);
+    margin: 2rem;
 }
 
 body {
+    min-width: fit-content;
+    font-family: var(--font-family-primary);
+    font-weight: 400;
+    font-size: 1.3rem;
     height: 100%;
-    background-color: darkslategray;
+    background-color: var(--color-background);
 }
 
-.page {
-    height: 100%;
+@mixin flex {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.container {
+    margin-inline: auto;
 }
 
 .board {
-    width: fit-content;
-    display: inline-block;
+    min-width: 1024px;
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
 }
 
 .row-container {
-    width: fit-content;
     background-color: white;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: row;
+    align-self: center;
 }
 
 .cell {
     height: 32px;
     width: 32px;
-    border: var(--cell-border);
-    background-color: var(--cell-color);
+    border: var(--color-cell__border);
+    background-color: var(--color-cell);
     margin: 1px;
     padding: 0;
-    display: flex;
-    align-items: center;
     cursor: pointer;
 
     &__visible {
-        font-family: Courier;
-        background-color: var(--cell-color-hover);
+        background-color: var(--color-cell__hover);
         height: 32px;
         width: 32px;
-        border: var(--cell-border);
+        border: var(--color-cell__border);
         margin: 1px;
-        padding: 0;
-        display: flex;
         align-items: center;
+
+        & > p {
+            margin: auto;
+        }
     }
 
     &:hover {
-        background-color: var(--cell-color-hover);
+        background-color: var(--color-cell__hover);
     }
 }
 
 .score-container {
     display: flex;
-    width: 30%;
+    width: 100%;
 
     & > * {
-        font-family: Courier;
-        color: white;
         width: 100%;
-        padding: 10px;
-        align-self: center;
-        justify-content: center;
     }
-}
-
-.config-container {
-    display: flex;
-    width: 30%;
-    float: right;
-
-    & > * {
-        font-family: Courier;
-        color: white;
-        width: 100%;
-        padding: 10px;
-        align-self: center;
-        justify-content: center;
-        cursor: pointer;
-    }
-}
-
-if, p {
-    margin: auto;
-    color: white;
 }
 
 .control-container {
@@ -102,20 +115,4 @@ if, p {
     width: 32px;
     height: 32px;
     cursor: pointer;
-}
-
-.text {
-    &__heading {
-        font-family: Courier;
-        color: white;
-        margin: 4px;
-        font-size: 3em;
-    }
-
-    &__instruction {
-        font-family: Courier;
-        color: white;
-        margin: 24px;
-        font-size: 2em;
-    }
 }

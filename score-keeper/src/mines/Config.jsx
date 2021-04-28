@@ -1,5 +1,5 @@
 import React from 'react';
-import './Sweeper.scss';
+import './Navigation.scss';
 import Base from './Base';
 
 class Config extends React.Component {
@@ -15,11 +15,18 @@ class Config extends React.Component {
 
     render() {
         return (
-            <div className='config-container'>
-                {this.configs.map((config, i) => {
-                    return <div key={i} onClick={() => this.handleClick(config)} >{config.name}</div>
-                })}
-            </div>
+            <header>
+                <h1 class='logo'><span className='logo__left'>Mine</span>sweeper</h1>
+                <input type='checkbox' id='nav-toggle' className='nav-toggle' />
+                <label for='nav-toggle' className='nav-toggle-label'><span></span></label>
+                <nav className='nav-container'>
+                    <ul>
+                        {this.configs.map((config, i) => {
+                            return <li key={i} onClick={() => this.handleClick(config)}>{config.name}</li>
+                        })}
+                    </ul>
+                </nav>
+            </header>
         )
     }
 }
