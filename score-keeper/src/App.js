@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import MatTable from "./Table";
 import Board from "./mines/Sweeper";
 
 class Turn extends React.Component {

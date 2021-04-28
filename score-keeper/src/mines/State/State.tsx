@@ -14,6 +14,7 @@ export const MINED: string = "MINED";
 export const FLAG: string = "FLAG";
 export const SHOW: string = "SHOW";
 export const MINE: string = "MINE";
+export const STOP: string = "STOP";
 
 function handleHidden(item: Item, action: string) {
     let state: string = item.state;
@@ -38,6 +39,7 @@ function handleFlagged(item: Item, action: string) {
 
 export function handleState(item: Item, action: string) {
     if (item.disabled) return item;
+    if (action === STOP) item = _.merge(item, { disabled: true });
     switch (item.state) {
         case (HIDDEN): return handleHidden(item, action);
         case (VISIBLE): return item;

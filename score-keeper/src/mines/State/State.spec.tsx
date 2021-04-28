@@ -13,7 +13,7 @@ import {
     minesHidden,
     minesLeft,
     showNumberCells
-} from '../Calculation/Calc';
+} from '../Calculation/Calculation';
 
 // const Transition = {
 //     HIDDEN: { FLAG: true, SHOW: true, MINE: true }, 

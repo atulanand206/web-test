@@ -3,17 +3,20 @@ import './Sweeper.scss';
 import Base from "./Base";
 import Cell from './Cell';
 import Score from './Score';
-import Calculation from './Calculation/Calculation';
+import {
+    addStart,
+    addEnd,
+    getTime
+} from './Calculation/TimeRange';
 import {
     emptyCells,
     minedCells,
     revealCell,
     minesHidden,
-    showNumberCells,
     minesLeft,
     calculateScore,
     triggerFlag
-} from './Calculation/Calc';
+} from './Calculation/Calculation';
 import Server from './Server';
 import Config from './Config';
 import Control from './Control';
@@ -21,7 +24,6 @@ class Board extends React.Component {
 
     constructor(props) {
         super(props);
-        this.calculation = new Calculation();
         this.server = new Server();
         this.config = Base.configs[0];
         this.state = {
@@ -47,14 +49,12 @@ class Board extends React.Component {
 
     handleClick(e, item, i, j) {
         if (item.value === Base.mine) {
-            console.log(JSON.stringify(this.state.cells));
             this.setState({ 
                 mineHit: true, 
                 instructions: "You played well, you just weren't lucky enough!",
                 cells: minedCells(this.state.cells, i, j) 
             });
             this.pause();
-            console.log(JSON.stringify(this.state.cells));
         } else if (item.value === Base.empty) {
             this.setState({ cells: emptyCells(this.state.cells, i, j) });
         } else {
@@ -80,8 +80,11 @@ class Board extends React.Component {
                 instructions: "You are the master, keep conquering."
             });
             this.pause();
+            // this.save();
         }
-        this.save();
+        if (this.state.mineHit) {
+            // this.save();
+        }
     }
 
     onResetBoard(config) {
@@ -104,7 +107,7 @@ class Board extends React.Component {
     }
 
     updateTime() {
-        this.setState({ time: this.calculation.getTime(this.state.times) });
+        this.setState({ time: getTime(this.state.times) });
     }
 
     startTimer() {
@@ -118,7 +121,7 @@ class Board extends React.Component {
     play() {
         if (!this.state.gameActive && !this.state.mineHit) {
             this.setState({
-                times: this.calculation.addStart(this.state.times),
+                times: addStart(this.state.times),
                 gameActive: true
             });
             this.startTimer();
@@ -128,7 +131,7 @@ class Board extends React.Component {
     pause() {
         if (this.state.gameActive) {
             this.setState({
-                times: this.calculation.addEnd(this.state.times),
+                times: addEnd(this.state.times),
                 gameActive: false
             });
             this.stopTimer();
@@ -140,7 +143,8 @@ class Board extends React.Component {
             config: this.state.config,
             times: this.state.times,
             score: calculateScore(this.state.cells),
-            won: !this.state.mineHit && this.state.minesLeft === 0
+            won: !this.state.mineHit && this.state.minesLeft === 0,
+            finished: (!this.state.mineHit && this.state.minesLeft === 0) || this.state.mineHit
         })
     }
 

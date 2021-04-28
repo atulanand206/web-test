@@ -1,6 +1,6 @@
-import Base from './../Base';
-import { Item, handleState } from './../State/State';
-import * as State from './../State/State';
+import Base from '../Base';
+import { Item, handleState } from '../State/State';
+import * as State from '../State/State';
 
 export function emptyBooleanMatrix(cells: Item[][]) {
     return cells.map((x: Item[]) => x.map((y: Item) => false));
@@ -74,7 +74,7 @@ export function showNumberCells(cells: Item[][]) {
 }
 
 export function minedCells(cells: Item[][], i: number, j: number) {
-    return cells.map(row => row.map(col => { if (col.value === Base.mine) return handleState(col, State.MINE); return col; }));
+    return cells.map(row => row.map(col => { if (col.value === Base.mine) return handleState(col, State.MINE); return handleState(col, State.STOP); }));
 }
 
 export function minesHidden(cells: Item[][]) {
