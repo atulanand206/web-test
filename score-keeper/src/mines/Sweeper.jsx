@@ -18,8 +18,9 @@ import {
     triggerFlag
 } from './Calculation/Calculation';
 import Server from './Server';
-import Config from './Config';
+import Header from './Header/Header';
 import Control from './Control';
+import Footer from './Footer/Footer';
 class Board extends React.Component {
 
     constructor(props) {
@@ -150,7 +151,7 @@ class Board extends React.Component {
     render() {
         return (
             <div className='container'>
-                {<Config
+                {<Header
                     onConfigChanged={(config) => this.onResetBoard(config)} />}
                 <br/>
                 <br/>
@@ -181,6 +182,7 @@ class Board extends React.Component {
                         </div>
                     })}
                 </div>
+                <Footer />
             </div>
         )
     }

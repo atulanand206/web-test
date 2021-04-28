@@ -1,8 +1,9 @@
 import React from 'react';
 import './Navigation.scss';
-import Base from './Base';
+import './../Sweeper.scss';
+import Base from '../Base';
 
-class Config extends React.Component {
+class Header extends React.Component {
 
     constructor(props) {
         super(props);
@@ -15,7 +16,7 @@ class Config extends React.Component {
 
     render() {
         return (
-            <header>
+            <header className='above-all'>
                 <h1 class='logo'><span className='logo__left'>Mine</span>sweeper</h1>
                 <input type='checkbox' id='nav-toggle' className='nav-toggle' />
                 <label for='nav-toggle' className='nav-toggle-label'><span></span></label>
@@ -31,4 +32,4 @@ class Config extends React.Component {
     }
 }
 
-export default Config;
+export default Header;
