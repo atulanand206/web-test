@@ -149,3 +149,16 @@ nav li {
         transform: scale(1, 1);
     }
 }
+
+.nav-top {
+    display: flex;
+}
+
+.nav-icon {
+    margin-block: auto;
+    margin-right: 1em;
+    filter: hue-rotate(90deg);
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+}

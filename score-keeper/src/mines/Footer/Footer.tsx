@@ -40,7 +40,8 @@ class Footer extends React.Component<Props, State> {
                         <p>Github</p>
                     </div>
                     <div
-                        className='icon'>
+                        className='icon'
+                        onClick={() => window.open('https://github.com/atulanand206/minesweeper')}>
                         <FontAwesomeIcon icon={faCodeBranch} color={'white'} />
                         <p>v0.1.0</p>
                     </div>

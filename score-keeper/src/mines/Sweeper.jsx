@@ -85,6 +85,7 @@ class Board extends React.Component {
         if (this.state.mineHit) {
             // this.save();
         }
+        this.save();
     }
 
     onResetBoard(config) {
@@ -151,38 +152,35 @@ class Board extends React.Component {
     render() {
         return (
             <div className='container'>
-                {<Header
-                    onConfigChanged={(config) => this.onResetBoard(config)} />}
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                {<Score
-                    score={calculateScore(this.state.cells)}
-                    minesLeft={minesLeft(this.state.cells, this.state.config.mines, this.state.mineHit)}
-                    times={this.state.times}
-                    time={this.state.time} />}
-                {<Control
-                    play={() => this.play()}
-                    pause={() => this.pause()}
-                    gameActive={this.state.gameActive} />}
-                <br />
-                <h3>{this.state.instructions}</h3>
-                <div className='board'>
-                    {this.state.cells.map((element, i) => {
-                        return <div className="row-container" key={i}> {element.map((em, j) => {
-                            return <Cell key={i + " " + j} value={em.value} state={em.state}
-                                gameActive={this.state.gameActive}
-                                config={this.state.config}
-                                mineHit={this.state.mineHit} disabled={em.disabled}
-                                onClick={(e) => this.handleClick(e, em, i, j)}
-                                onMineIdentify={(e) => this.onMineIdentify(e, em, i, j)} />
+                <Header className='main-header'
+                    onConfigChanged={(config) => this.onResetBoard(config)} />
+                <main>
+                    {<Score
+                        score={calculateScore(this.state.cells)}
+                        minesLeft={minesLeft(this.state.cells, this.state.config.mines, this.state.mineHit)}
+                        times={this.state.times}
+                        time={this.state.time} />}
+                    {<Control
+                        play={() => this.play()}
+                        pause={() => this.pause()}
+                        gameActive={this.state.gameActive} />}
+                    <br />
+                    <h3>{this.state.instructions}</h3>
+                    <div className='board'>
+                        {this.state.cells.map((element, i) => {
+                            return <div className="row-container" key={i}> {element.map((em, j) => {
+                                return <Cell key={i + " " + j} value={em.value} state={em.state}
+                                    gameActive={this.state.gameActive}
+                                    config={this.state.config}
+                                    mineHit={this.state.mineHit} disabled={em.disabled}
+                                    onClick={(e) => this.handleClick(e, em, i, j)}
+                                    onMineIdentify={(e) => this.onMineIdentify(e, em, i, j)} />
+                            })}
+                            </div>
                         })}
-                        </div>
-                    })}
-                </div>
-                <Footer />
+                    </div>
+                </main>
+                <Footer className='main-footer'/>
             </div>
         )
     }

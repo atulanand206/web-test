@@ -31,9 +31,14 @@ p {
 }
 
 .above-all {
-    position: fixed;
+    position: sticky;
     width: 100%;
-    z-index: 999;
+}
+
+body,
+.root,
+.container {
+    height: 100%;
 }
 
 body {
@@ -41,9 +46,40 @@ body {
     font-family: var(--font-family-primary);
     font-weight: 400;
     font-size: 1.3rem;
-    height: 100%;
     background-color: var(--color-background);
 }
+
+.container {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+// .main-container {
+//     position: absolute;
+//     height: 80%;
+//     width: 100%;
+//     margin-top: 20%;
+//     margin-left: auto;
+//     margin-right: auto;
+// }
+
+// @media screen and (min-width: 1200px) {
+//     .main-container {    
+//         margin-top: 3%;
+//     }
+// }
+
+// @media screen and (min-width: 1000px) and (max-width: 1200px) {
+//     .main-container {    
+//         margin-top: 5%;
+//     }
+// }
+
+// @media screen and (min-width: 600px) and (max-width: 1000px) {
+//     .main-container {    
+//         margin-top: 10%;
+//     }
+// }
 
 @mixin flex {
     display: -webkit-box;
@@ -57,7 +93,6 @@ body {
 .board {
     margin-top: 0;
     min-width: 1024px;
-    height: 100%;
     padding-bottom: 2em;
     transform: scale(0.8, 0.8);
     background-color: var(--color-background);

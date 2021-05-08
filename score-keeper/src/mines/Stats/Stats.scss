@@ -1,0 +1,24 @@
+.stats-container {
+    position: absolute;
+    top: 3em;
+    width: fit-content;
+    height: 500px;
+    padding: 1em;
+    background: var(--color-navigation-background);
+    border-radius: 1em;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.stats-container-hidden {
+    display: none;
+}
+
+
+.game-container {
+    display: flex;
+
+    & > * {
+        color: white;
+    }
+}
