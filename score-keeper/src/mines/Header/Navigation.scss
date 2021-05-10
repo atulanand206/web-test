@@ -34,11 +34,14 @@ header {
     position: relative;
     margin: 1em 0;
     display: grid;
+    grid-template-columns: auto auto;
     margin-inline: 20em;
     min-width: 270px;
 }
 
 .config-select-selection {
+    grid-row: 1/-1;
+    grid-column: 1/2;
     height: 100%;
     padding: 0.5em 0em 0.5em 0.5em;
     font-size: 1.5rem;
@@ -55,6 +58,8 @@ header {
 }
 
 .config-select-arrow {
+    grid-row: 1/-1;
+    grid-column: 1/2;
     position: absolute;
     padding: 0.5em 0;
     top:0;
@@ -90,7 +95,9 @@ header {
 }
 
 .nav-icon {
+    grid-row: 1/-1;
     margin: auto;
+    margin-right: 0;
     filter: hue-rotate(90deg);
     width: 48px;
     height: 48px;
@@ -110,12 +117,12 @@ header {
 
     .config-select {
         grid-column: 5/6;
-        display: block;
         margin-inline: 0;
     }
 
     .nav-icon {
         grid-column: 6/7;
+        margin: auto;
     }
 
     .stats-container {

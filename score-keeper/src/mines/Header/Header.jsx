@@ -37,8 +37,8 @@ class Header extends React.Component {
                         })}
                     </select>
                     <span className='config-select-arrow'></span>
+                    <img className='nav-icon' src='leaderboard.svg' alt='leaderboard' onClick={() => this.onLeaderBoardClicked()}/>
                 </div>
-                <img className='nav-icon' src='leaderboard.svg' alt='leaderboard' onClick={() => this.onLeaderBoardClicked()}/>
                 <Stats isVisible={this.state.isStatsVisible}/>
             </header>
         )
