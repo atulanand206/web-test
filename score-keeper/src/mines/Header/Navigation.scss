@@ -35,16 +35,18 @@ header {
     margin: 1em 0;
     display: grid;
     margin-inline: 20em;
+    min-width: 270px;
 }
 
 .config-select-selection {
     height: 100%;
-    padding: 0.5em 1em;
+    padding: 0.5em 0em 0.5em 0.5em;
     font-size: 1.5rem;
     background: var(--color-dark);
     color: var(--color-white);
     border: 0;
     font-family: var(--font-family-primary);
+    appearance: none;
 }
 
 .config-select-option {
@@ -88,8 +90,7 @@ header {
 }
 
 .nav-icon {
-    margin-block: auto;
-    margin-right: 1em;
+    margin: auto;
     filter: hue-rotate(90deg);
     width: 48px;
     height: 48px;

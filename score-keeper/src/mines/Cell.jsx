@@ -1,6 +1,7 @@
 import React from 'react';
 import "./Sweeper.scss";
 import * as State from './State/State';
+import {isMobile} from 'react-device-detect';
 
 class Cell extends React.Component {
     constructor(props) {
@@ -9,7 +10,7 @@ class Cell extends React.Component {
     }
 
     isLow() {
-        return window.innerWidth < 1100;
+        return isMobile;
     }
 
     isDisabled() {

@@ -19,13 +19,16 @@ export function addEnd(times: DateRange[]) {
 }
 
 export function format(number: number) {
-    return ('0' + Math.round(number)).slice(-2);
+    return ('0' + Math.floor(number)).slice(-2);
 }
 
 export function timeDifferenceString(diff: number) {
-    const diffInSeconds = format(diff / (1000));
-    const diffInMinutes = format(diff / (1000 * 60));
-    const diffInHours = format(diff / (1000 * 3600));
+    const diffString = diff.toString().split("")
+    diffString[diffString.length - 1] = '0'
+    diff = parseInt(diffString.join(""));
+    const diffInSeconds = format((diff / 1000) % 60);
+    const diffInMinutes = format((diff / 60000) % 60);
+    const diffInHours = format((diff / 3600000));
     return diffInHours + ':' + diffInMinutes + ':' + diffInSeconds;
 }
 
