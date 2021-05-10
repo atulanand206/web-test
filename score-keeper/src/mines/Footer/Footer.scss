@@ -1,7 +1,9 @@
 footer {
-    position: sticky;
+    position: absolute;
     bottom: 0;
     display: grid;
+    padding-block: 1em;
+    background: var(--color-normal);
     grid-template-columns: 0.5fr 1fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 1fr 0.5fr;
     margin-bottom: 1em;
     

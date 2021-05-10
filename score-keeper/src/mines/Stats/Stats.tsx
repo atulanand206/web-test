@@ -41,6 +41,12 @@ class Stats extends React.Component<Props, State> {
     render() {
         return (
             <div className={this.props.isVisible && this.state.loaded ? 'stats-container' : 'stats-container-hidden'}>
+                <h4>Leaderboard</h4>
+                <div key={-1} className='game-container'>
+                    <p>Rank</p>
+                    <p>Name</p>
+                    <p>Rating</p>
+                </div>
                 {this.state.games.map((game, i) => {
                     return (
                         <div key={i} className='game-container'>

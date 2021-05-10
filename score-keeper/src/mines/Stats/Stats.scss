@@ -1,10 +1,11 @@
 .stats-container {
     position: absolute;
-    top: 4em;
     width: fit-content;
+    margin-inline: auto;
+    display: inline;
     height: 500px;
     padding: 1em 0;
-    background: var(--color-navigation-background);
+    background: var(--color-darker);
     border-radius: 10px;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -32,10 +33,11 @@
     display: grid;
     grid-template-columns: 1fr 9em 1fr;
     position: relative;
-    background: var(--color-background);
+    background: var(--color-dark);
 
     & > * {
         color: white;
+        padding-inline: 1em;
     }
 }
 
@@ -46,4 +48,11 @@
     width: 100%;
     bottom: 0;
     background: var(--color-white);
+}
+
+@media screen and (min-width: 1000px) {
+    .stats-container {
+        position: absolute;
+        top: 4em;
+    }
 }

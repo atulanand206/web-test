@@ -1,13 +1,9 @@
 :root {
     --color-white: white;
-    --color-cell: tomato;
-    --color-cell__hover: firebrick;
-    --color-cell__border: slategray;
-    --color-header-background: rgb(192, 86, 70);
-    --color-navigation-darker-background: rgb(10, 33, 33);
-    --color-navigation-background: rgb(22, 50, 50);
-    --color-background: darkslategray;
-    --color-accent: #900000;
+    --color-gray: gray;
+    --color-normal: darkslategray;
+    --color-dark: rgb(22, 50, 50);
+    --color-darker: rgb(10, 33, 33);
     --font-family-primary: Courier;
 }
 
@@ -15,6 +11,7 @@
 *::before,
 *::after {
     box-sizing: border-box;
+    margin: 0;
 }
 
 body,
@@ -39,7 +36,7 @@ body,
 .root,
 .App,
 .container {
-    height: 100vh;
+    height: 100%;
 }
 
 body {
@@ -47,7 +44,7 @@ body {
     font-family: var(--font-family-primary);
     font-weight: 400;
     font-size: 1.3rem;
-    background-color: var(--color-background);
+    background-color: var(--color-normal);
 }
 
 .container {
@@ -61,7 +58,7 @@ body {
     min-width: 1024px;
     padding-bottom: 2em;
     transform: scale(0.8, 0.8);
-    background-color: var(--color-background);
+    background-color: var(--color-normal);
     display: flex;
     flex-direction: column;
 }
@@ -76,27 +73,18 @@ body {
 .cell {
     height: 32px;
     width: 32px;
-    border: var(--color-cell__border);
-    background-color: var(--color-cell);
     margin: 1px;
     padding: 0;
     cursor: pointer;
 
     &__visible {
-        background-color: var(--color-cell__hover);
         height: 32px;
         width: 32px;
-        border: var(--color-cell__border);
         margin: 1px;
         align-items: center;
-
-        & > p {
-            margin: auto;
-        }
-    }
-
-    &:hover {
-        background-color: var(--color-cell__hover);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
