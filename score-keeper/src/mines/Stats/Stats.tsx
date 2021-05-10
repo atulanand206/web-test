@@ -1,15 +1,20 @@
 import React from 'react';
-import Server, { fetchGames } from './../Server';
+import { fetchGames } from './../Server';
 import { DateRange } from './../Calculation/TimeRange';
 import './Stats.scss';
 
+interface Player {
+    name: string
+}
 interface Game {
     score: number
     times: DateRange[]
+    player: Player
 }
 
 interface State {
     games: Game[]
+    loaded: boolean
 }
 
 interface Props {
@@ -22,25 +27,26 @@ class Stats extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            games: []
+            games: [],
+            loaded: false
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         fetchGames("Beginner", (res: Game[]) => {
-            this.setState({games: res});
+            this.setState({games: res, loaded: true});
         });
     }
 
     render() {
-        console.log(this.state.games);
         return (
-            <div className={this.props.isVisible ? 'stats-container' : 'stats-container-hidden'}>
-                {this.state.games.map(game => {
+            <div className={this.props.isVisible && this.state.loaded ? 'stats-container' : 'stats-container-hidden'}>
+                {this.state.games.map((game, i) => {
                     return (
-                        <div className='game-container'>
+                        <div key={i} className='game-container'>
+                            <p>{i+1}</p>
+                            <p>{game.player.name}</p>
                             <p>{game.score}</p>
-                            <p>{game.times[0].start}</p>
                         </div>
                     );
                 })}

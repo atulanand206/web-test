@@ -15,7 +15,7 @@ class Header extends React.Component {
     }
 
     handleClick(config) {
-        this.props.onConfigChanged(config);
+        this.props.onConfigChanged(this.configs[config.target.selectedIndex]);
     }
 
     onLeaderBoardClicked() {
@@ -26,17 +26,19 @@ class Header extends React.Component {
     render() {
         return (
             <header className='above-all'>
-                <h1 className='logo'><span className='logo__left'>Mine</span>sweeper</h1>
-                <input type='checkbox' id='nav-toggle' className='nav-toggle' />
-                <label for='nav-toggle' className='nav-toggle-label'><span></span></label>
-                <nav className='nav-container'>
-                    <ul>
+                <div className='logo-container'>
+                    <div className='logo-wrapper'></div>
+                    <h1 className='logo'><span className='logo__left'>Mine</span>sweeper</h1>
+                </div>
+                <div className='config-select'>
+                    <select className='config-select-selection' onChange={(e) => this.handleClick(e)}>
                         {this.configs.map((config, i) => {
-                            return <li key={i} onClick={() => this.handleClick(config)}>{config.name}</li>
+                            return <option className='config-select-option' key={i}>{config.name}</option>
                         })}
-                    </ul>
-                </nav>
-                <img className='nav-icon' src='leaderboard.svg' onClick={() => this.onLeaderBoardClicked()}/>
+                    </select>
+                    <span className='config-select-arrow'></span>
+                </div>
+                <img className='nav-icon' src='leaderboard.svg' alt='leaderboard' onClick={() => this.onLeaderBoardClicked()}/>
                 <Stats isVisible={this.state.isStatsVisible}/>
             </header>
         )
