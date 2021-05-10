@@ -73,7 +73,6 @@ class Board extends React.Component {
     }
 
     isFinished() {
-        console.log(this.state.mineHit);
         if (!this.state.mineHit && minesHidden(this.state.cells) === 0) {
             this.setState({ 
                 // cells: showNumberCells(this.state.cells),
